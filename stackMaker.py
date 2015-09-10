@@ -21,13 +21,14 @@ class StackMaker(object):
                     loadSheet['units'][0])
         self.generators = []
         for i in range(len(genSheet['name'])):
-            self.generators += [Generator(genSheet['name'][i], genSheet['type'][i], genSheet['fuel'][i],
-                                          float(genSheet['heatRate'][i]), float(genSheet['peakCapacity'][i]),
-                                          float(genSheet['minCapacity'][i]), float(genSheet['opsAndMaint'][i]),
+            self.generators += [Generator(genSheet['name'][i], genSheet['type'][i], float(genSheet['peakCapacity'][i]),
+                                          float(genSheet['opsAndMaint'][i]),
+                                          genSheet['fuel'][i], float(genSheet['heatRate'][i]),
+                                          float(genSheet['minCapacity'][i]),
                                           {"summer": float(genSheet['derate summer'][i]),
                                            "winter": float(genSheet['derate winter'][i])},
-                                          genSheet['rampRate'][i],
-                                          genSheet['loc'][i], genSheet['dateBuilt'][i], genSheet['dateDecom'][i])]
+                                          genSheet['rampRate'][i], genSheet['loc'][i], genSheet['dateBuilt'][i],
+                                          genSheet['dateDecom'][i])]
         self.fuels = []
         for i in range(len(fuelSheets)):
             self.fuels += [Fuel(fuelSheets[i]['type'][0], fuelSheets[i]['price'], fuelSheets[i]['startDate'][0],
