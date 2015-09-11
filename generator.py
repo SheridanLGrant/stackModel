@@ -26,8 +26,13 @@ class Generator(object):
         self.peakCapacity = peakCapacity
         self.minCapacity = minCapacity
         self.opsAndMaint = opsAndMaint
+
         self.derate = derate
-        self.rampRate = rampRate
+        if (derate["summer"] == 0) & (derate["winter"] == 0):
+            derate["summer"] = 1
+            derate["winter"] = 1
+
+        self.rampRate = rampRate + peakCapacity * (rampRate == 0)
         self.loc = loc
         self.dateBuilt = pd.to_datetime(dateBuilt)
         self.dateDecom = dateDecom

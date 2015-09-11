@@ -14,15 +14,16 @@ class Fuel(object):
     # Fuel Oil No. 2 used
 
 
-    def __init__(self, type, price = 0, startDate = 0, timeStep = "M", GHGcost = 0, units = "$/MMBtu"):
+    def __init__(self, type = "none", price = 0, startDate = 0, timeStep = "M", GHGcost = 0, units = "$/MMBtu"):
         if type in generator.Generator.fuels:
             self.type = type
         else:
             raise TypeError("Please enter an appropriate fuel type. See Fuel.fuels.")
 
+        self.CO2factor = Fuel.CO2emissions[type]
+
         if not type == "none":
 
-            self.CO2factor = Fuel.CO2emissions[type]
 
             self.data = pd.Series(data = np.array(price))
 
@@ -38,6 +39,10 @@ class Fuel(object):
                                  index = pd.date_range(self.data.index[len(self.data) - 1] + 1, periods = 1,
                                                        freq = self.data.index.freq))
             self.data = self.data.append(appendee)
+
+        else:
+            self.data = []
+
 
         self.GHGcost = GHGcost
         self.units = units
