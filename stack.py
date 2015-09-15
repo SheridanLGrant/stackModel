@@ -23,8 +23,11 @@ class Stack(object):
         # We added an extra data point in the fuel constructor--now we remove it once we've coerced the
         # time series into the appropriate time step
         for fuel in self.fuels:
-            fuel.data = fuel.data.resample(load.data.index.freq, fill_method = 'pad')
-            fuel.data = fuel.data[:(len(fuel.data)-1)]
+            if fuel.type == "none":
+                fuel.data = pd.Series([0]*len(load.data), index = load.data.index)
+            else:
+                fuel.data = fuel.data.resample(load.data.index.freq, fill_method = 'pad')
+                fuel.data = fuel.data[:(len(fuel.data)-1)]
 
         # Similar coercion required for load data in order to get ramping rates done correctly
         appendee = pd.Series(self.load.data[len(self.load.data) - 1],
@@ -52,7 +55,7 @@ class Stack(object):
         for period in load.data.index:
             for gen in generators:
                 gen.costPerUnitNoGHG[period] = gen.opsAndMaint + float(gen.heatRate)/1000 * self.fuelDict[gen.fuel][0].data[period]
-                gen.costPerUnitGHG[period] = gen.opsAndMaint + float(gen.heatRate)/1000 * Fuel.CO2emissions[gen.fuel] * self.fuelDict[gen.fuel][0].GHGcost
+                gen.costPerUnitGHG[period] = float(gen.heatRate)/1000 * Fuel.CO2emissions[gen.fuel] * self.fuelDict[gen.fuel][0].GHGcost
                 gen.costPerUnit[period] = gen.costPerUnitNoGHG[period] + gen.costPerUnitGHG[period]
 
 

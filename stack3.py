@@ -37,6 +37,7 @@ class Stack3(Stack):
 
             sol = mip.solve()
             print sol
+            print period
 
             for i in range(len(self.generators)):
                 self.generators[i].dispatch[period] = value(y[i])
