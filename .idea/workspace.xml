@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="106792f5-528d-40df-bbcc-7e7d0ac40c84" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fuel.py" afterPath="$PROJECT_DIR$/fuel.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generator.py" afterPath="$PROJECT_DIR$/generator.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/stack.py" afterPath="$PROJECT_DIR$/stack.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/stack3.py" afterPath="$PROJECT_DIR$/stack3.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/stackMaker.py" afterPath="$PROJECT_DIR$/stackMaker.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="106792f5-528d-40df-bbcc-7e7d0ac40c84" name="Default" comment="" />
     <ignored path="Stack Model.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
