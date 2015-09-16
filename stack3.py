@@ -36,8 +36,8 @@ class Stack3(Stack):
                     mip += y[i] >= lowerRamp[i] * x[i]
 
             sol = mip.solve()
-            print sol
-            print period
+            # print sol
+            # print period
 
             for i in range(len(self.generators)):
                 self.generators[i].dispatch[period] = value(y[i])

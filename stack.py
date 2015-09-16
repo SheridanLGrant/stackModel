@@ -100,9 +100,9 @@ class Stack(object):
 
         n_gen_fields = 4
 
-        output = pd.DataFrame(np.zeros([len(self.load.data), 3 + n_gen_fields*len(self.generators)]))
+        output = pd.DataFrame(np.zeros([len(self.load.data), 5 + n_gen_fields*len(self.generators)]))
 
-        columns1 = ['Total Generation', 'Total Generation Cost', 'Total Generation GHG Cost']
+        columns1 = ['Load', 'Total Generation', 'Unmet Load', 'Total Generation Cost', 'Total Generation GHG Cost']
         columns2 = [map(operator.add, [x]*n_gen_fields,
                         [' Generation', ' Generation Cost', ' Generation GHG Cost',
                          ' Generation Cost per MWh']) for x in [gen.name for gen in self.generators]]
@@ -111,7 +111,10 @@ class Stack(object):
         output.columns = columns1 + columns2
         output.index = self.load.data.index
 
+
+        output['Load'] = self.load.data
         output['Total Generation'] = self.totalGen
+        output['Unmet Load'] = output['Load'] - output['Total Generation']
         output['Total Generation Cost'] = self.totalCost
         output['Total Generation GHG Cost'] = self.totalCostGHG
 
