@@ -22,7 +22,8 @@ class StackMaker(object):
         self.generators = []
         for i in range(len(genSheet['name'])):
             self.generators += [Generator(genSheet['name'][i], genSheet['type'][i], float(genSheet['peakCapacity'][i]),
-                                          float(genSheet['opsAndMaint'][i]), float(genSheet['startupCost'][i]),
+                                          float(genSheet['opsAndMaint'][i]), float(genSheet['minUpHours'][i]),
+                                          float(genSheet['minDownHours'][i]), float(genSheet['startupCost'][i]),
                                           genSheet['fuel'][i], float(genSheet['heatRate'][i]),
                                           float(genSheet['minCapacity'][i]),
                                           {"summer": float(genSheet['derate summer'][i]),
