@@ -39,6 +39,7 @@ class Stack(object):
         for gen in self.generators:
             self.genByFuel[gen.fuel] += [gen]
             gen.dispatch = pd.Series([float(0)]*len(load.data), index = load.data.index)
+            gen.starts = pd.Series([float(0)]*len(load.data), index = load.data.index)
             gen.fuelUse = pd.Series([float(0)]*len(load.data), index = load.data.index)
             gen.emissions = pd.Series([float(0)]*len(load.data), index = load.data.index)
             gen.costPerUnitNoGHG = pd.Series([float(0)]*len(load.data), index = load.data.index)
@@ -80,16 +81,18 @@ class Stack(object):
         self.totalCost = pd.Series([0]*len(self.load.data), index = self.load.data.index)
         self.totalCostNoGHG = pd.Series([0]*len(self.load.data), index = self.load.data.index)
         self.totalCostGHG = pd.Series([0]*len(self.load.data), index = self.load.data.index)
-
+        self.totalStartupCost = pd.Series([0]*len(self.load.data), index = self.load.data.index)
 
         for gen in self.generators:
             gen.dispatchCost = gen.dispatch*gen.costPerUnit
             gen.dispatchCostNoGHG = gen.dispatch*gen.costPerUnitNoGHG
             gen.dispatchCostGHG = gen.dispatch*gen.costPerUnitGHG
-            self.totalCost += gen.dispatchCost
+            gen.startCosts = gen.starts * gen.startupCost
+            self.totalCost += (gen.dispatchCost + gen.startCosts)
             self.totalCostGHG += gen.dispatchCostGHG
             self.totalCostNoGHG += gen.dispatchCostNoGHG
-            print gen.name + ' costs were ' + str(sum(gen.dispatchCost))
+            self.totalStartupCost += gen.startCosts
+            print gen.name + ' generation costs were ' + str(sum(gen.dispatchCost))
 
         print 'Total cost was ' + str(sum(self.totalCost))
 
@@ -98,16 +101,15 @@ class Stack(object):
 
         self.totalGen = sum([gen.dispatch for gen in self.generators])
 
-        n_gen_fields = 4
-
-        output = pd.DataFrame(np.zeros([len(self.load.data), 5 + n_gen_fields*len(self.generators)]))
-
-        columns1 = ['Load', 'Total Generation', 'Unmet Load', 'Total Generation Cost', 'Total Generation GHG Cost']
-        columns2 = [map(operator.add, [x]*n_gen_fields,
-                        [' Generation', ' Generation Cost', ' Generation GHG Cost',
-                         ' Generation Cost per MWh']) for x in [gen.name for gen in self.generators]]
+        columns1 = ['Load', 'Total Generation', 'Unmet Load', 'Total Generation Cost', 'Total Generation GHG Cost',
+                    'Total Startup Cost']
+        genColumns = [' Generation', ' Generation Cost', ' Generation GHG Cost',
+                         ' Generation Cost per MWh', ' Startup Cost']
+        columns2 = [map(operator.add, [x]*len(genColumns),
+                        genColumns) for x in [gen.name for gen in self.generators]]
 
         columns2 = [item for sublist in columns2 for item in sublist]
+        output = pd.DataFrame(np.zeros([len(self.load.data), len(columns1) + len(columns2)]))
         output.columns = columns1 + columns2
         output.index = self.load.data.index
 
@@ -117,12 +119,14 @@ class Stack(object):
         output['Unmet Load'] = output['Load'] - output['Total Generation']
         output['Total Generation Cost'] = self.totalCost
         output['Total Generation GHG Cost'] = self.totalCostGHG
+        output['Total Startup Cost'] = self.totalStartupCost
 
         for gen in self.generators:
             output[gen.name + ' Generation'] = gen.dispatch
             output[gen.name + ' Generation Cost'] = gen.dispatchCost
             output[gen.name + ' Generation GHG Cost'] = gen.dispatchCostGHG
             output[gen.name + ' Generation Cost per MWh'] = gen.costPerUnit
+            output[gen.name + ' Startup Cost'] = gen.startCosts
 
         output.to_csv(path)
 

@@ -9,7 +9,7 @@ class Generator(object):
     types = ["CC", "CT", "coal", "steam oil", "steam gas"]
     fuels = ["gas", "coal", "oil", "other", "none"]
 
-    def __init__(self, name, type, peakCapacity, opsAndMaint, fuel = "none", heatRate = 0, minCapacity = 0,
+    def __init__(self, name, type, peakCapacity, opsAndMaint, startupCost = 0, fuel = "none", heatRate = 0, minCapacity = 0,
                  derate = {"summer": 1, "winter": 1}, rampRate = 1000, loc = '', dateBuilt = '',
                  dateDecom = pd.datetime(2100,1,1)):
 
@@ -26,6 +26,7 @@ class Generator(object):
         self.peakCapacity = peakCapacity
         self.minCapacity = minCapacity
         self.opsAndMaint = opsAndMaint
+        self.startupCost = startupCost
 
         self.derate = derate
         if (derate["summer"] == 0) & (derate["winter"] == 0):
