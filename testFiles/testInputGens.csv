@@ -1,0 +1,3 @@
+name,type,fuel,heatRate,peakCapacity,minCapacity,opsAndMaint,derate summer,derate winter,rampRate,loc,dateBuilt,dateDecom
+Beaver,CC,gas,8000,450,300,3,0.8,1.2,50,Oregon,1900,2050
+Otter,CT,oil,9000,500,200,4,0.9,1,100,Washington,1950,2025

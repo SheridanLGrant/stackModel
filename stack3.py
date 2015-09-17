@@ -14,7 +14,8 @@ class Stack3(Stack):
 
     def dispatch(self):
         for period in self.load.data.index:
-
+            # y = generation
+            # x = integer dummy variables
             x = [LpVariable('x_' + str(i), 0, 1, 'Integer') for i in range(len(self.generators))]
             y = [LpVariable('y_' + str(i), 0, cat = 'Continuous') for i in range(len(self.generators))]
             c = [gen.costPerUnit[period] for gen in self.generators]
@@ -32,8 +33,12 @@ class Stack3(Stack):
                 mip += y[i] <= upper[i] * x[i]
                 mip += y[i] >= lower[i] * x[i]
                 if period - 1 in self.load.data.index:
-                    mip += y[i] <= upperRamp[i] * x[i]
-                    mip += y[i] >= lowerRamp[i] * x[i]
+                    if self.generators[i].dispatch[period - 1] == 0 and self.generators[i].minCapacity > 0:
+                        mip += y[i] <= self.generators[i].minCapacity
+                    else:
+                        mip += y[i] <= upperRamp[i] * x[i]
+                        mip += y[i] >= lowerRamp[i] * x[i]
+
 
             sol = mip.solve()
             # print sol
