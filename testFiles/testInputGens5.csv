@@ -1,0 +1,2 @@
+name,type,fuel,heatRate,peakCapacity,minCapacity,opsAndMaint,derate summer,derate winter,rampRate,loc,dateBuilt,dateDecom,startupCost,minUpHours,minDownHours
+Beaver,CC,gas,8000,450,100,3,0.8,1.2,2,Oregon,1900,2050,20000,10,5

@@ -1,10 +1,13 @@
-__author__ = 'sheridan'
-
+from __future__ import division
 from generator import *
 from fuel import *
 from load import *
 import numpy as np
 import operator
+import math
+
+__author__ = 'sheridan'
+
 
 class Stack(object):
     """Builds a stack model with given inputs"""
@@ -48,6 +51,14 @@ class Stack(object):
             gen.rampSeries = pd.Series([gen.rampRate]*len(minTS),
                                        index = minTS).resample(self.load.data.index.freq, fill_method = 'pad')
             gen.rampSeries = gen.rampSeries * (len(minTS) - 1)/len(self.load.data)
+
+            # Round up...
+            gen.minUpTime = math.ceil(gen.minUpHours * (60 * (load.data.index.freq == 'min') + \
+                                              1 * (load.data.index.freq == 'h') + \
+                                              1/24 * (load.data.index.freq == 'd')))
+            gen.minDownTime = math.ceil(gen.minDownHours * (60 * (load.data.index.freq == 'min') + \
+                                              1 * (load.data.index.freq == 'h') + \
+                                              1/24 * (load.data.index.freq == 'd')))
 
         self.fuelDict = {key: [] for key in Generator.fuels}
         for fuel in fuels:
