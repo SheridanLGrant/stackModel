@@ -11,6 +11,8 @@ A generation dispatch model with 2 modes:
 
 All modes support fuel, O&M, and CO2 cost inputs.
 
+Error handling is minimal. You may get a PuLP solver error--that means the MIP solver attempted an infeasible problem and couldn't handle it gracefully. If you're just playing around with it, try adding flexible generators to your generators file--the right addition will make all problems the solver must solve feasible.
+
 The stackMaker.py wrapper file allows easy construction of a dispatch model from .csv files. Wrapper test files are included in the testing folder in the repository--the input conventions should be easy to glean from these files.
 
 We're interested in improving the MIP mode so that it has moving-window optimization and other functionality to make the dispatch more realistic. Feel free to talk to me or fork the repo if you would like to make updates.
