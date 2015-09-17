@@ -19,6 +19,13 @@ class Stack3(Stack):
             x = [LpVariable('x_' + str(i), 0, 1, 'Integer') for i in range(len(self.generators))]
             y = [LpVariable('y_' + str(i), 0, cat = 'Continuous') for i in range(len(self.generators))]
             c = [gen.costPerUnit[period] for gen in self.generators]
+
+            # Right now we apply no startup cost at the beginning
+            if period - 1 in self.load.data.index:
+                s = [(gen.dispatch[period - 1] == 0) * gen.startupCost for gen in self.generators]
+            else:
+                s = [0] * len(self.generators)
+
             upper = [gen.peakCapacity * derate(period.month, gen) for gen in self.generators]
             lower = [gen.minCapacity for gen in self.generators]
 
@@ -27,7 +34,7 @@ class Stack3(Stack):
                 lowerRamp = [gen.dispatch[period - 1] - gen.rampSeries[period] for gen in self.generators]
 
             mip = LpProblem('Dispatch', sense = 1)
-            mip += lpDot(y, c)
+            mip += (lpDot(y, c) + lpDot(x, s))
             mip += lpSum(y) == self.load.data[period]
             for i in range(len(self.generators)):
                 mip += y[i] <= upper[i] * x[i]
@@ -46,3 +53,4 @@ class Stack3(Stack):
 
             for i in range(len(self.generators)):
                 self.generators[i].dispatch[period] = value(y[i])
+                self.generators[i].starts[period] = (s[i] * value(x[i])) > 0

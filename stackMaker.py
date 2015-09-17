@@ -6,7 +6,7 @@ import pandas as pd
 
 class StackMaker(object):
 
-    def __init__(self, MIP = False, loadPath = 'S:/Sheridans_Documents/Stack Model/testInputLoad4.csv',
+    def __init__(self, MIP = False, loadPath = 'S:/Sheridans_Documents/Stack Model/testInputLoad3.csv',
                  genPath= 'S:/Sheridans_Documents/Stack Model/testInputGens4.csv',
                  fuelPaths = ['S:/Sheridans_Documents/Stack Model/testInputOil.csv',
                  'S:/Sheridans_Documents/Stack Model/testInputGas.csv']):
@@ -22,7 +22,7 @@ class StackMaker(object):
         self.generators = []
         for i in range(len(genSheet['name'])):
             self.generators += [Generator(genSheet['name'][i], genSheet['type'][i], float(genSheet['peakCapacity'][i]),
-                                          float(genSheet['opsAndMaint'][i]),
+                                          float(genSheet['opsAndMaint'][i]), float(genSheet['startupCost'][i]),
                                           genSheet['fuel'][i], float(genSheet['heatRate'][i]),
                                           float(genSheet['minCapacity'][i]),
                                           {"summer": float(genSheet['derate summer'][i]),
