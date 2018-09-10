@@ -1,6 +1,5 @@
 # stackModel
-Sheridan Grant
-Associate, Energy & Environmental Economics
+Sheridan Grant: Associate, Energy & Environmental Economics
 
 A generation dispatch model with 2 modes:
   1. Simple Mode: Dispatches generators economically, where the only constraint on a generator's output is its peak capacity.        Simply iteratively dispatches the least-cost generator until load is met or all generators are dispatched.
